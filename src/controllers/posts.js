@@ -1,4 +1,5 @@
 const {getAllPosts:getAll, getPostById:getById, getPostsByUserId: getByUser, createPost: create, updatePost: update} = require('../services/posts');
+const {getUserById: getUser} = require('../services/users');
 
 const getAllPosts = async (req, res, next) => {
     try{
@@ -21,8 +22,11 @@ const getPostById = async (req, res, next) => {
 
 const getPostsByUserId = async (req, res, next) => {
     try{
-        const posts = await getByUser(req.params.id);
-        res.json(posts);
+        let paginate = req.body.paginate;
+        const user = await getUser(req.params.id);
+        if (!user) throw {status: 404, message: 'Usuario no encontrado'};
+        const posts = await getByUser(req.params.id, paginate);
+        res.json({posts, user: {id: user.id, username: user.username}});
     }catch(err){
         next(err);
     }

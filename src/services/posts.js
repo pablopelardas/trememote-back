@@ -28,14 +28,19 @@ const getPostById = async (id) => {
 };
 
 // Get by user id
-const getPostsByUserId = async (user_id) => {
+const getPostsByUserId = async (user_id, paginate) => {
     // eslint-disable-next-line no-useless-catch
     try {
-        const posts = await Post.findAll({
+        let options = {
             where: {
                 user_id
             }
-        });
+        };
+        if (paginate){
+            options.limit = paginate.limit;
+            options.offset = paginate.offset;
+        }
+        const posts = await Post.findAndCountAll(options);
         return posts;
     } catch (error) {
         throw error;

@@ -1,8 +1,8 @@
+require('dotenv').config();
 const cookieParser = require('cookie-parser') ;
 const cors = require('cors') ;
 const express = require('express') ;
 const morgan = require('morgan') ;
-const {User} = require('./models/index.js');
 
 const errorHandler = require('./middlewares/errorHandler') ;
 const notFound = require('./middlewares/notFound') ;
@@ -18,9 +18,9 @@ app.use(morgan('dev'));
 
 app.use(
     cors({
-        origin: 'http://localhost:3000',
+        origin: process.env.CLIENT,
         credentials: true,
-        methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'DELETE'],
+        methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'DELETE', 'PATCH'],
         allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization', 'authorization'],
     }),
 );

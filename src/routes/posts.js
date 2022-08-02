@@ -13,12 +13,12 @@ router.get('/', handlePaginate, getAllPosts);
 router.get('/:id', getPostById);
 
 // Get by user ID
-router.get('/:id/posts', getPostsByUserId);
+router.get('/:id/posts', handlePaginate, getPostsByUserId);
 
 // Create post
 router.post('/', authenticateToken, postValidationRules(), validate ,createPost);
 
 // Update post
-router.put('/:id', authenticateToken, postValidationRules(), validate, updatePost);
+router.patch('/:id', authenticateToken, postValidationRules(), validate, updatePost);
 
 module.exports = router;

@@ -9,8 +9,10 @@ const getAllUsers = async (username, email, paginate) => {
             include:[{
                 model: Post,
                 attributes: ['id', 'title', 'content', 'createdAt'],
+                required: true,
             }],
-            order:[[Post, 'createdAt', 'DESC']]
+            order:[[Post, 'createdAt', 'DESC'], ['id', 'DESC']],
+            distinct: true,
         };
         if (paginate){
             options.limit = paginate.limit;
