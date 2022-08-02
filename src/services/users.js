@@ -1,16 +1,24 @@
 const {User, Post} = require('../models/index');
+const {Op} = require('sequelize');
 
 // Get all users
-const getAllUsers = async () => {
+const getAllUsers = async (username, email, paginate) => {
     // eslint-disable-next-line no-useless-catch
     try {
-        const users = await User.findAll({
+        let options = {
             include:[{
                 model: Post,
                 attributes: ['id', 'title', 'content', 'createdAt'],
             }],
             order:[[Post, 'createdAt', 'DESC']]
-        });
+        };
+        if (paginate){
+            options.limit = paginate.limit;
+            options.offset = paginate.offset;
+        }
+        if (username) options.where.username = {[Op.like]: `%${username}%`};
+        if (email) options.where.email = {[Op.like]: `%${email}%`};
+        const users = await User.findAndCountAll(options);
         return users;
     } catch (error) {
         throw {status:500, message: 'Error al obtener los usuarios'};
@@ -31,7 +39,7 @@ const getUserById = async (id) => {
         order:[[Post, 'createdAt', 'DESC']]
     });
     if (!user) throw ({status:404, message: 'No se encontró el usuario'});
-    return user;
+    return user.dataValues;
     
 };
 

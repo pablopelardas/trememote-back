@@ -2,7 +2,10 @@ const {getAllUsers: getAll, getUserById: getById} = require('../services/users')
 
 const getAllUsers = async (req, res, next) => {
     try {
-        const users = await getAll();
+        let username = req.query.username;
+        let email = req.query.email;
+        let paginate = req.body.paginate;
+        const users = await getAll(username, email, paginate);
         res.send(users);
     } catch (error) {
         next(error);
