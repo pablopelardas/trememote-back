@@ -7,6 +7,12 @@ const userValidationRules = () => {
         body('password').isLength({min: 6}).withMessage('La contraseña debe tener al menos 6 caracteres'),
     ];
 };
+const postValidationRules = () => {
+    return [
+        body('title').exists().withMessage('Debe enviar un título'),
+        body('content').exists().withMessage('Debe enviar un contenido').isLength({min: 20}).withMessage('El contenido debe tener al menos 20 caracteres'),
+    ];
+};
 
 const validate = (req, res, next) => {
     const errors = validationResult(req);
@@ -20,5 +26,6 @@ const validate = (req, res, next) => {
 
 module.exports = {
     userValidationRules,
+    postValidationRules,
     validate
 };
